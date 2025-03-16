@@ -13,7 +13,7 @@ import com.qa.opencart.pages.HomePage;
 public class HomePageTest {
 	
 	PlaywriteFactory pf;
-	private Page page;
+	 Page page;
 	
 	HomePage homePage ; 
 	
