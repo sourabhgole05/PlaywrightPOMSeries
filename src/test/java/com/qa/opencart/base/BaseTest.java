@@ -6,13 +6,13 @@ import org.testng.annotations.AfterTest;
 import org.testng.annotations.BeforeTest;
 
 import com.microsoft.playwright.Page;
-import com.qa.opencart.factory.PlaywriteFactory;
+import com.qa.opencart.factory.PlaywrightFactory;
 import com.qa.opencart.pages.HomePage;
 import com.qa.opencart.pages.LoginPage;
 
 public class BaseTest {
 
-	PlaywriteFactory pf;
+	PlaywrightFactory pf;
 	private Page page;
 	protected Properties prop;
 
@@ -22,7 +22,7 @@ public class BaseTest {
 
 	@BeforeTest
 	public void setup() {
-		pf = new PlaywriteFactory();
+		pf = new PlaywrightFactory();
 		prop = pf.init_prop();
 		page = pf.initBrowser(prop);
 		homePage = new HomePage(page);
