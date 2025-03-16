@@ -13,47 +13,79 @@ public class PlaywriteFactory {
 	Browser browser;
 	BrowserContext browserContext;
 	Page page;
-
 	Properties prop;
+
+	private static ThreadLocal<Browser> tlBrowser = new ThreadLocal<>();
+	private static ThreadLocal<BrowserContext> tlBrowserContext = new ThreadLocal<>();
+	private static ThreadLocal<Page> tlPage = new ThreadLocal<>();
+	private static ThreadLocal<Playwright> tlPlaywright = new ThreadLocal<>();
+
+	public static Playwright getPlaywright() {
+		return tlPlaywright.get();
+	}
+
+	public static Browser getBrowser() {
+		return tlBrowser.get();
+	}
+
+	public static BrowserContext getBrowserContext() {
+		return tlBrowserContext.get();
+	}
+
+	public static Page getPage() {
+		return tlPage.get();
+	}
 
 	public Page initBrowser(Properties prop) {
 		String browserName = prop.getProperty("browser").trim();
 		System.out.println("Browser name is: " + browserName);
 
-		playwright = Playwright.create();
+		// playwright = Playwright.create();
+		tlPlaywright.set(Playwright.create());
 
 		switch (browserName.toLowerCase()) {
 		case "chromium":
-			browser = playwright.chromium().launch(new BrowserType.LaunchOptions().setHeadless(false));
+			//browser = playwright.chromium().launch(new BrowserType.LaunchOptions().setHeadless(false));
+			tlBrowser.set(getPlaywright().chromium().launch(new BrowserType.LaunchOptions().setHeadless(false)));
 			break;
 		case "chrome":
-			browser = playwright.chromium()
-					.launch(new BrowserType.LaunchOptions().setChannel("chrome").setHeadless(false));
+			//browser = playwright.chromium().launch(new BrowserType.LaunchOptions().setChannel("chrome").setHeadless(false));
+			//tlBrowser.set(playwright.chromium().launch(new BrowserType.LaunchOptions().setChannel("chrome").setHeadless(false)));
+			tlBrowser.set(getPlaywright().chromium().launch(new BrowserType.LaunchOptions().setChannel("chrome").setHeadless(false)));
 			break;
 		case "safari":
-			browser = playwright.webkit().launch(new BrowserType.LaunchOptions().setHeadless(false));
+			//browser = playwright.webkit().launch(new BrowserType.LaunchOptions().setHeadless(false));
+			tlBrowser.set(getPlaywright().webkit().launch(new BrowserType.LaunchOptions().setHeadless(false)));
 			break;
 		case "firefox":
-			browser = playwright.firefox().launch(new BrowserType.LaunchOptions().setHeadless(false));
+			//browser = playwright.firefox().launch(new BrowserType.LaunchOptions().setHeadless(false));
+			tlBrowser.set(getPlaywright().firefox().launch(new BrowserType.LaunchOptions().setHeadless(false)));
 			break;
 		case "edge":
-			browser = playwright.chromium()
-					.launch(new BrowserType.LaunchOptions().setChannel("msedge").setHeadless(false));
+			//browser = playwright.chromium().launch(new BrowserType.LaunchOptions().setChannel("msedge").setHeadless(false));
+			tlBrowser.set(getPlaywright().chromium().launch(new BrowserType.LaunchOptions().setChannel("msedge").setHeadless(false)));
 			break;
 		default:
 			throw new IllegalArgumentException("Invalid browser name: " + browserName);
 		}
 
 		// Ensure browser is initialized before calling newContext()
-		if (browser == null) {
+		if (tlBrowser == null) {
 			throw new IllegalStateException("Browser is not initialized. Check browser launch settings.");
 		}
 
-		browserContext = browser.newContext();
-		page = browserContext.newPage();
-		page.navigate(prop.getProperty("url").trim());
+		//browserContext = browser.newContext();
+		tlBrowserContext.set(getBrowser().newContext());
+		
+		//page = browserContext.newPage();
+		tlPage.set(getBrowserContext().newPage());
+	
+		
+		//page.navigate(prop.getProperty("url").trim());
+		getPage().navigate(prop.getProperty("url").trim());
 
-		return page;
+		
+		return getPage();
 	}
 
 	// init properties file
