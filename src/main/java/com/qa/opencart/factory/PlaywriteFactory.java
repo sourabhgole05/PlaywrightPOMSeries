@@ -27,6 +27,9 @@ public class PlaywriteFactory {
             case "firefox":
                 browser = playwright.firefox().launch(new BrowserType.LaunchOptions().setHeadless(false));
                 break;
+            case "edge":
+                browser = playwright.chromium().launch(new BrowserType.LaunchOptions().setChannel("msedge").setHeadless(false));
+                break;
             default:
                 throw new IllegalArgumentException("Invalid browser name: " + browserName);
         }
