@@ -5,7 +5,7 @@
     <classes>
       <class name="pom.qa.opencart.tests.HomePageTest">
         <methods>
-          <include name="seachTest"/>
+          <include name="homePageURLTest"/>
           <include name="setup"/>
           <include name="tearDown"/>
         </methods>
